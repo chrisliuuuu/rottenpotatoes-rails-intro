@@ -9,19 +9,23 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
-    
     @all_ratings = Movie.all_ratings
     @ratings_to_show = []
     @sort_tag = params[:sort_tag]
 
     if not params[:ratings].nil? then
       @ratings_to_show = params[:ratings]
+      session[:ratings] = @ratings_to_show
       @movies = Movie.with_ratings(@ratings_to_show.keys)
     end
 
-    if not @sort_tag.nil? then
+    if @sort_tag == session[:sort_tag] then
+      session.delete(:sort_tag)
+    elsif not @sort_tag.nil? then
+      session[:sort_tag] = @sort_tag
       @movies = @movies.order(@sort_tag)
     end
+    @movies
 
 
   end
