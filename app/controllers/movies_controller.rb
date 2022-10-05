@@ -10,7 +10,7 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
-    @ratings_to_show = []
+    @ratings_to_show = @all_ratings
     @sort_tag = params[:sort_tag]
 
     if not params[:ratings].nil? then
