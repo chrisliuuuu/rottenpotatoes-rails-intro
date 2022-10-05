@@ -19,9 +19,7 @@ class MoviesController < ApplicationController
       @movies = Movie.with_ratings(@ratings_to_show.keys)
     end
 
-    if @sort_tag == session[:sort_tag] then
-      session.delete(:sort_tag)
-    elsif not @sort_tag.nil? then
+    if not @sort_tag.nil? then
       session[:sort_tag] = @sort_tag
       @movies = @movies.order(@sort_tag)
     end
