@@ -10,7 +10,7 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     @all_ratings = Movie.all_ratings
-    @ratings_to_show = @all_ratings
+    @ratings_to_show = @all_ratings || session[:ratings]
     @sort_tag = params[:sort_tag]
 
     if not params[:ratings].nil? then
@@ -20,7 +20,7 @@ class MoviesController < ApplicationController
     end
 
     if not @sort_tag.nil? then
-      session[:sort_tag] = @sort_tag
+      # session[:sort_tag] = @sort_tag
       @movies = @movies.order(@sort_tag)
     end
     @movies
@@ -30,12 +30,13 @@ class MoviesController < ApplicationController
 
   def new
     # default: render 'new' template
+    
   end
 
   def create
     @movie = Movie.create!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully created."
-    redirect_to movies_path
+    redirect_to movies_path({:ratings => session[:ratings]})
   end
 
   def edit
@@ -53,7 +54,7 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
-    redirect_to movies_path
+    redirect_to movies_path({:ratings => session[:ratings]})
   end
 
   private
